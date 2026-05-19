@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>呼吸系统健康问诊助手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "微软雅黑", sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .chat-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #ecf0f1;
+        }
+        .message {
+            margin-bottom: 15px;
+            max-width: 70%;
+            line-height: 1.6;
+        }
+        .user-message {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 15px 15px 0 15px;
+            margin-left: auto;
+        }
+        .ai-message {
+            background-color: white;
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 15px 15px 15px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .input-area {
+            display: flex;
+            padding: 15px;
+            background-color: white;
+            border-top: 1px solid #eee;
+        }
+        #user-input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            outline: none;
+            font-size: 16px;
+        }
+        #send-btn {
+            margin-left: 10px;
+            padding: 12px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">呼吸系统健康问诊助手</div>
+    <div class="chat-container" id="chat-container">
+        <div class="message ai-message">你好！我是专注呼吸系统健康的问诊助手，你可以问我关于病因、症状、日常调理的问题哦~</div>
+    </div>
+    <div class="input-area">
+        <input type="text" id="user-input" placeholder="请输入你的问题...">
+        <button id="send-btn">发送</button>
+    </div>
+
+    <script>
+        const chatContainer = document.getElementById('chat-container');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        // 这里写你Agent的真实回复，多写几条，用户输入会随机匹配
+        const replies = {
+            "咳嗽": "咳嗽的常见原因有风寒/风热外邪、肺脾气虚、痰湿内生等。日常要注意保暖，少吃生冷甜食，多喝温水；如果是风寒咳嗽可以喝姜茶驱寒，风热咳嗽可以喝梨水润肺哦~",
+            "慢阻肺": "慢阻肺患者日常要注意补肺益肾，避免受凉感冒，冬春季节可以试试三伏贴调理；平时要戒烟，适度做八段锦等温和运动，避免劳累。",
+            "哮喘": "哮喘患者要注意避开过敏原，保持室内通风，冬春季节注意保暖；发作期要及时用药，缓解期可以通过饮食调理，比如吃山药、百合补肺。",
+            "default": "你问的问题我收到啦！关于呼吸系统健康，日常要注意防寒保暖、清淡饮食、戒烟限酒，避免劳累，有不适要及时就医哦~"
+        };
+
+        sendBtn.addEventListener('click', () => {
+            const text = userInput.value.trim();
+            if (!text) return;
+
+            // 添加用户消息
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user-message';
+            userMsg.textContent = text;
+            chatContainer.appendChild(userMsg);
+
+            // 清空输入框
+            userInput.value = '';
+
+            // 模拟AI回复（延迟0.8秒，更真实）
+            setTimeout(() => {
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'message ai-message';
+                // 根据用户输入匹配回复
+                let reply = replies["default"];
+                for (let key in replies) {
+                    if (text.includes(key)) {
+                        reply = replies[key];
+                        break;
+                    }
+                }
+                aiMsg.textContent = reply;
+                chatContainer.appendChild(aiMsg);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 800);
+        });
+
+        // 回车发送
+        userInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') sendBtn.click();
+        });
+    </script>
+</body>
+</html>
